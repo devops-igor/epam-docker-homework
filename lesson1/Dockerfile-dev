@@ -1,0 +1,17 @@
+# pull node 16
+FROM node:16-alpine
+
+# set working directory
+WORKDIR /frontend
+
+# install app dependencies
+COPY ./frontend/package.json ./
+COPY ./frontend/package-lock.json ./
+RUN npm install
+RUN npm install react-scripts
+
+# add app
+COPY ./frontend ./
+
+# start app
+CMD ["npm", "start"]

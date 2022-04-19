@@ -1,0 +1,17 @@
+# build environment
+FROM node:16-alpine as build
+
+# set working directory
+WORKDIR /frontend
+
+# install app dependencies
+COPY ./frontend/package.json ./
+COPY ./frontend/package-lock.json ./
+RUN npm install --silent
+RUN npm install react-scripts --silent
+COPY ./frontend ./
+RUN npm run build
+
+# production environment
+FROM caddy:2.4.6
+COPY --from=build /frontend/build /usr/share/caddy/
