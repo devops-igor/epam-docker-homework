@@ -15,3 +15,4 @@ RUN npm run build
 # production environment
 FROM caddy:2.4.6
 COPY --from=build /frontend/build /usr/share/caddy/
+COPY ./Caddyfile /etc/caddy/Caddyfile
