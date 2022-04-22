@@ -1,0 +1,43 @@
+version: '3'
+services:
+  frontend:
+    image: localhost:5000/frontend:${TAG}
+    container_name: frontend
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    networks:
+      - frontend
+  backend:
+    image: localhost:5000/backend:${TAG}
+    container_name: backend
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    depends_on:
+      - database
+    networks:
+      - frontend
+      - backend
+  database:
+    image: postgres:14.2
+    container_name: database
+    pull_policy: always
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=django
+      - POSTGRES_USER=django
+      - POSTGRES_PASSWORD=django
+    volumes:
+      - /opt/database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - backend
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
