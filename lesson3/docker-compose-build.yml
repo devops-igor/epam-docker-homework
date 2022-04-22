@@ -6,27 +6,13 @@ x-frontend:
   build:
     context: .
     dockerfile: frontend.Dockerfile
-  container_name: frontend
-  restart: unless-stopped
-  ports:
-    - 3000:3000
-  networks:
-    - frontend
+
 x-backend:
   &default-backend
   image: localhost:5000/backend:latest
   build:
     context: .
     dockerfile: backend.Dockerfile 
-  container_name: backend
-  restart: unless-stopped
-  ports:
-    - 8000:8000
-  depends_on:
-    - database
-  networks:
-    - frontend
-    - backend
 
 services:
   frontend:
@@ -40,25 +26,3 @@ services:
   version_tag_backend:
     << : *default-backend
     image: localhost:5000/backend:${TAG}
-
-  database:
-    image: postgres:14.2
-    container_name: database
-    pull_policy: always
-    restart: unless-stopped
-    environment:
-      - POSTGRES_DB=django
-      - POSTGRES_USER=django
-      - POSTGRES_PASSWORD=django
-    volumes:
-      - /opt/database:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
-    networks:
-      - backend
-
-networks:
-  frontend:
-    driver: bridge
-  backend:
-    driver: bridge
