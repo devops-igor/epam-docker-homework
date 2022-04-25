@@ -32,8 +32,6 @@ services:
       - POSTGRES_PASSWORD=django
     volumes:
       - /opt/database:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
     networks:
       - backend
 networks:
